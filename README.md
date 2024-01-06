@@ -74,8 +74,75 @@ NativeAOT せず SingleFile でビルドした場合
 
 ## クロスコンパイル可能か
 
-とりあえず NativeAOT では無理。  
-そもそも NativeAOT がクロスコンパイルをサポートしていない。
+### NativeAOT
 
-TODO  
-SingleFile の場合はクロスコンパイル可能か。
+→　無理  
+そもそも NativeAOT がクロスコンパイルをサポートしていない。  
+※ビルド時にサポート外エラーになる。
+
+### SingleFile 
+
+→　ビルドできるが起動しない
+
+```
+dotnet publish GetStartedApp --os win
+```
+
+ビルドできたが exe のサイズが 1 KB 違う…  
+→　exe 実行しても反応なし　※エラーは後述
+
+![](doc/image/2024-01-06-10-57-05.png)
+
+イベントビューアーを確認  
+publish に GetStartedApp.dll が無いらしい。  
+お前の中にあるだろ...
+
+```
+Description: A .NET application failed.
+Application: GetStartedApp.exe
+Path: C:\Users\user\Desktop\dotnet\dotnet8_native_aot_avalonia_ui_example1\GetStartedApp\bin\Release\net8.0\win-x64\publish\GetStartedApp.exe
+Message: The application to execute does not exist: 'C:\Users\user\Desktop\dotnet\dotnet8_native_aot_avalonia_ui_example1\GetStartedApp\bin\Release\net8.0\win-x64\publish\GetStartedApp.dll'.
+```
+
+GetStartedApp.dll を上から持ってきてみたがやっぱりダメ
+
+```
+Description: A .NET application failed.
+Application: GetStartedApp.exe
+Path: C:\Users\user\Desktop\dotnet\dotnet8_native_aot_avalonia_ui_example1\GetStartedApp\bin\Release\net8.0\win-x64\publish\GetStartedApp.exe
+Message: Could not resolve CoreCLR path. For more details, enable tracing by setting COREHOST_TRACE environment variable to 1
+```
+
+## 環境
+
+ローカル　※Windows
+```
+> dotnet --info
+.NET SDK:
+ Version:           8.0.100
+ Commit:            57efcf1350
+ Workload version:  8.0.100-manifests.3b83835e
+
+ランタイム環境:
+ OS Name:     Windows
+ OS Version:  10.0.19045
+ OS Platform: Windows
+ RID:         win-x64
+ Base Path:   C:\Program Files\dotnet\sdk\8.0.100\
+```
+
+VM　※Linux
+```
+vagrant@vagrant:~$ dotnet --info
+.NET SDK:
+ Version:           8.0.100
+ Commit:            57efcf1350
+ Workload version:  8.0.100-manifests.6c33ef20
+
+Runtime Environment:
+ OS Name:     ubuntu
+ OS Version:  23.04
+ OS Platform: Linux
+ RID:         linux-x64
+ Base Path:   /usr/share/dotnet/sdk/8.0.100/
+```

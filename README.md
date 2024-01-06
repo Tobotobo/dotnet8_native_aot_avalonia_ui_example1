@@ -61,7 +61,7 @@ dotnet publish GetStartedApp
 NativeAOT せず SingleFile でビルドした場合  
 →　約 90 MB (※)
 
-※PDF ファイル込みだとこっちの方が小さい。なんで？
+※PDB ファイル込みだとこっちの方が小さい。なんで？
 
 ```xml
 <PropertyGroup>
